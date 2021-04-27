@@ -54,8 +54,8 @@ public class PlayerControllerX : MonoBehaviour
             Destroy(other.gameObject);
             hasPowerup = true;
             powerupIndicator.SetActive(true);
-            CancelInvoke("PowerupCooldown");
-            Invoke("PowerupCooldown", powerUpDuration);
+            CancelInvoke("PowerupCooldown"); // if we already had a Powerup
+            Invoke("PowerupCooldown", powerUpDuration); // get Powerup
         }
     }
 
@@ -79,7 +79,7 @@ public class PlayerControllerX : MonoBehaviour
             }
             else // if no powerup, hit enemy with normal strength 
             {
-                enemyRigidbody.AddForce(awayFromPlayer * normalStrength, ForceMode.Impulse);
+                enemyRigidbody.AddForce(awayFromPlayer.normalized * normalStrength, ForceMode.Impulse);
             }
 
 
