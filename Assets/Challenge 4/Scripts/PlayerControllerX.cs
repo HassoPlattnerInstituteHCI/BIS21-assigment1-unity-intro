@@ -75,7 +75,7 @@ public class PlayerControllerX : MonoBehaviour
             }
             else // if no powerup, hit enemy with normal strength 
             {
-                enemyRigidbody.AddForce(awayFromPlayer.normalized * normalStrength, ForceMode.Impulse);
+                enemyRigidbody.AddForce(awayFromPlayer * normalStrength, ForceMode.Impulse);
             }
 
           
