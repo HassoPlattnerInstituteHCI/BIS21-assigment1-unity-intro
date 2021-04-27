@@ -25,10 +25,18 @@ public class PlayerControllerX : MonoBehaviour
 
     void Update()
     {
-        // Add force to player in direction of the focal point (and camera)
         float verticalInput = Input.GetAxis("Vertical");
-        playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime); 
 
+        if (Input.GetButtonDown("Jump"))
+        {
+            // When "boosting": 150x the force
+            playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * 150 * Time.deltaTime);
+        }
+        else
+        {
+            // Add force to player in direction of the focal point (and camera)
+            playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime);
+        }
         // Set powerup indicator position to beneath player
         powerupIndicator.transform.position = transform.position + new Vector3(0, -0.6f, 0);
 
@@ -39,9 +47,11 @@ public class PlayerControllerX : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Powerup"))
         {
-            Destroy(other.gameObject);
             hasPowerup = true;
             powerupIndicator.SetActive(true);
+            Destroy(other.gameObject);
+            CancelInvoke("PowerupCooldown");
+            Invoke("PowerupCooldown", powerUpDuration);
         }
     }
 
@@ -57,7 +67,7 @@ public class PlayerControllerX : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Rigidbody enemyRigidbody = other.gameObject.GetComponent<Rigidbody>();
-            Vector3 awayFromPlayer =  transform.position - other.gameObject.transform.position; 
+            Vector3 awayFromPlayer =  other.gameObject.transform.position - transform.position; 
            
             if (hasPowerup) // if have powerup hit enemy with powerup force
             {
@@ -65,10 +75,10 @@ public class PlayerControllerX : MonoBehaviour
             }
             else // if no powerup, hit enemy with normal strength 
             {
-                enemyRigidbody.AddForce(awayFromPlayer * normalStrength, ForceMode.Impulse);
+                enemyRigidbody.AddForce(awayFromPlayer.normalized * normalStrength, ForceMode.Impulse);
             }
 
-
+          
         }
     }
 
