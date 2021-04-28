@@ -16,11 +16,9 @@ public class PlayerControllerX : MonoBehaviour
     private float powerupStrength = 25; // how hard to hit enemy with powerup
 
     public ParticleSystem boostParticles;
-    private float boostFactor = 600; 
-
+    
     void Start()
     {
-        playerRb = GetComponent<Rigidbody>();
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
     }
@@ -29,19 +27,10 @@ public class PlayerControllerX : MonoBehaviour
     {
         // Add force to player in direction of the focal point (and camera)
         float verticalInput = Input.GetAxis("Vertical");
+        playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime); 
 
-        if (Input.GetButtonDown("Boost"))
-        {
-            playerRb.AddForce(focalPoint.transform.forward * boostFactor); 
-            boostParticles.Play();
-        }
-        
-        playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime);
-        
-
-        // Set powerup and particle indicator position to beneath player
+        // Set powerup indicator position to beneath player
         powerupIndicator.transform.position = transform.position + new Vector3(0, -0.6f, 0);
-        boostParticles.transform.position = transform.position + new Vector3(0, -0.6f, 0);
 
     }
 
@@ -53,8 +42,6 @@ public class PlayerControllerX : MonoBehaviour
             Destroy(other.gameObject);
             hasPowerup = true;
             powerupIndicator.SetActive(true);
-            CancelInvoke();
-            Invoke("PowerupCooldown", powerUpDuration);
         }
     }
 
@@ -70,7 +57,7 @@ public class PlayerControllerX : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Rigidbody enemyRigidbody = other.gameObject.GetComponent<Rigidbody>();
-            Vector3 awayFromPlayer =  other.gameObject.transform.position - transform.position; 
+            Vector3 awayFromPlayer =  transform.position - other.gameObject.transform.position; 
            
             if (hasPowerup) // if have powerup hit enemy with powerup force
             {
