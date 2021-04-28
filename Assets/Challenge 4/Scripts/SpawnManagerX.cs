@@ -40,7 +40,7 @@ public class SpawnManagerX : MonoBehaviour
 
     void SpawnEnemyWave(int enemiesToSpawn)
     {
-        Vector3 powerupSpawnOffset = new Vector3(0, 1, -15); // make powerups spawn at player end
+        Vector3 powerupSpawnOffset = new Vector3(0, 0.7f, -15); // make powerups spawn at player end
 
         // If no powerups remain, spawn a powerup
         if (GameObject.FindGameObjectsWithTag("Powerup").Length == 0) // check that there are zero powerups
@@ -51,8 +51,7 @@ public class SpawnManagerX : MonoBehaviour
         // Spawn number of enemy balls based on wave number
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            GameObject spawned = Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
-            ((EnemyX) spawned.GetComponent("EnemyX")).speed *= waveCount;
+            Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
         }
 
         waveCount++;

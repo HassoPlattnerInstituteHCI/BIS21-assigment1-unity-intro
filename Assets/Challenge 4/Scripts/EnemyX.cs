@@ -13,8 +13,6 @@ public class EnemyX : MonoBehaviour
     {
         enemyRb = GetComponent<Rigidbody>();
         playerGoal = GameObject.Find("Player");
-
-        Debug.Log(speed);
     }
 
     // Update is called once per frame
@@ -32,7 +30,7 @@ public class EnemyX : MonoBehaviour
         if (other.gameObject.name == "Enemy Goal")
         {
             Destroy(gameObject);
-        } 
+        }
         else if (other.gameObject.name == "Player Goal")
         {
             Destroy(gameObject);
