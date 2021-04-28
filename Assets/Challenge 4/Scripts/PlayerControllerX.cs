@@ -8,6 +8,8 @@ public class PlayerControllerX : MonoBehaviour
     private float speed = 500;
     private GameObject focalPoint;
 
+    public int boostingDuration = 1;
+
     public bool hasPowerup;
     public GameObject powerupIndicator;
     public int powerUpDuration = 5;
@@ -15,13 +17,12 @@ public class PlayerControllerX : MonoBehaviour
     private float normalStrength = 10; // how hard to hit enemy without powerup
     private float powerupStrength = 25; // how hard to hit enemy with powerup
 
-    public ParticleSystem boostParticles;
+    public GameObject particles;
     
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
-        boostParticles = GetComponent<ParticleSystem>();
     }
 
     void Update()
@@ -31,14 +32,18 @@ public class PlayerControllerX : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed);
-            //boostParticles.Play();
+            //Play Boost Particles for 1 Second after Boosting
+            particles.SetActive(true);
+            CancelInvoke("BoostingParticles");
+            Invoke("BoostingParticles", boostingDuration);
+
         }
         else
         {
             playerRb.AddForce(focalPoint.transform.forward * verticalInput * speed * Time.deltaTime);
         }
-
-        // Set powerup indicator position to beneath player
+        // Set powerup indicator position and boost particles position to beneath player
+        particles.transform.position = transform.position + new Vector3(0, -0.6f, 0);
         powerupIndicator.transform.position = transform.position + new Vector3(0, -0.6f, 0);
         
     }
@@ -60,6 +65,11 @@ public class PlayerControllerX : MonoBehaviour
     {
         hasPowerup = false;
         powerupIndicator.SetActive(false);
+    }
+
+    void BoostingParticles()
+    {
+        particles.SetActive(false);
     }
 
     // If Player collides with enemy
