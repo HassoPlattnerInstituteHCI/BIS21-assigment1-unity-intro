@@ -25,7 +25,12 @@ In case you are getting the "Failed to load window layout" error when opening th
 4. Copy the file `Default.wlt` and paste it into `path/to/BIS21-assigment1-unity-intro/Library`.
 5. Delete `CurrentLayout-default.dwlt`.
 6. Rename `Default.wlt` to `CurrentLayout-default.dwlt`.
+7. Back when opening the Unity project go to the _Layout_ dropdown (top-right corner of the window) and click on _Revert Factory Settings..._.
+
+![Screenshot 2021-04-23 172141](https://user-images.githubusercontent.com/39165900/115893444-790e7500-a458-11eb-8d9d-8a69485446aa.png)
 
 Now you should be able to open up the project without any errors 🚀
 
 [Source](https://medium.com/@siqueiragleidson/unity-failed-to-load-windows-layout-when-start-a-new-project-b142f31c632a)
+
+BTW this error gets caused due to the _UserSettings_ folder (now deleted in this repo) which got introduced in Unity 2020. Be sure when publishing to GitHub you have the newest [`.gitignore`](https://github.com/github/gitignore/blob/master/Unity.gitignore) which also excludes the _UserSettings_ folder.
