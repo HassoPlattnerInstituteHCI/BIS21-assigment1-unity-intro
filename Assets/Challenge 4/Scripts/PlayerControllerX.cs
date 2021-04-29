@@ -15,12 +15,15 @@ public class PlayerControllerX : MonoBehaviour
     private float normalStrength = 10; // how hard to hit enemy without powerup
     private float powerupStrength = 25; // how hard to hit enemy with powerup
 
+    private System.DateTime startTime;
+
     public ParticleSystem boostParticles;
     
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
         focalPoint = GameObject.Find("Focal Point");
+        startTime = System.DateTime.UtcNow;
     }
 
     void Update()
@@ -32,6 +35,11 @@ public class PlayerControllerX : MonoBehaviour
         // Set powerup indicator position to beneath player
         powerupIndicator.transform.position = transform.position + new Vector3(0, -0.6f, 0);
 
+        if((System.DateTime.UtcNow - startTime).TotalSeconds> powerUpDuration)
+        {
+            PowerupCooldown();
+        }
+
     }
 
     // If Player collides with powerup, activate powerup
@@ -42,13 +50,14 @@ public class PlayerControllerX : MonoBehaviour
             Destroy(other.gameObject);
             hasPowerup = true;
             powerupIndicator.SetActive(true);
+            startTime = System.DateTime.UtcNow;
         }
     }
 
     void PowerupCooldown()
     {
         hasPowerup = false;
-        powerupIndicator.SetActive(false);
+        powerupIndicator.SetActive(false); 
     }
 
     // If Player collides with enemy
@@ -61,11 +70,11 @@ public class PlayerControllerX : MonoBehaviour
            
             if (hasPowerup) // if have powerup hit enemy with powerup force
             {
-                enemyRigidbody.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
+                enemyRigidbody.AddForce(awayFromPlayer * -1 * powerupStrength, ForceMode.Impulse);
             }
             else // if no powerup, hit enemy with normal strength 
             {
-                enemyRigidbody.AddForce(awayFromPlayer * normalStrength, ForceMode.Impulse);
+                enemyRigidbody.AddForce(awayFromPlayer * -1 * normalStrength, ForceMode.Impulse);
             }
 
 
