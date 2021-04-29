@@ -35,7 +35,13 @@ public class evilEnemy : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         // If enemy collides with either goal, destroy it
-        if (other.gameObject.name == "Enemy Goal")
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Rigidbody enemyRigidbody = other.gameObject.GetComponent<Rigidbody>();
+            Vector3 awayFromPlayer = other.gameObject.transform.position - transform.position;
+            enemyRigidbody.AddForce(awayFromPlayer * 10, ForceMode.Impulse);
+        }
+        else if (other.gameObject.name == "Enemy Goal")
         {
             Destroy(gameObject);
         }
@@ -43,6 +49,7 @@ public class evilEnemy : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
 
     }
 
